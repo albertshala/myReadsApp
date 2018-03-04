@@ -8,7 +8,6 @@ import * as BooksAPI from './BooksAPI'
 class BooksApp extends React.Component {
   state = {
     categories: ["currentlyReading","wantToRead","read"],
-    currentCategory: null,
     myBooks: []
   };
 

@@ -17,16 +17,17 @@ class BookShelf extends Component {
     }
 
     render() {
+        const {books, currentCategory, onUpdateBookCategory} = this.props;
         return(
             <div>
-                {this.props.currentCategory.map((catName) => (
+                {currentCategory.map((catName) => (
                 <div className="bookshelf" key={catName}>
                     <h2 className="bookshelf-title">{this.getFullCategoryName(catName)}</h2>
                     <div className="bookshelf-books">
                         <ol className="books-grid">
-                        {this.props.books.filter(books => books.shelf === catName).map( (aBook) => (
+                        {books.filter(book => book.shelf === catName).map( (aBook) => (
                             <li key={aBook.title + aBook.id}>
-                                <Book onUpdateBookCategory={this.props.onUpdateBookCategory } book={aBook} />
+                                <Book onUpdateBookCategory={onUpdateBookCategory } book={aBook} />
                             </li>
                         ))}
                         </ol>

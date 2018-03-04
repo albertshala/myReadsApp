@@ -12,38 +12,16 @@ class SearchPage extends Component {
 
         this.state = {
             query: '',
-            latestBooks: [],
-            currentCategories: [],
             books: []
         };
     }
 
   componentWillReceiveProps() {
-      let { query } = this.state;
-      //Get the latest books
-      this.getAllBooks();
-      //Check if there are books
-      if ( this.state.books.length > 0){
-          this.setState({
-              books: this.props.books
-          }, () => {
-              this.updateQuery(query);
-          });
-      }
-  }
-
-  getAllBooks = () => {
-      BooksAPI.getAll().then((books) => {
-        this.setState({books: books});
-      });
-  };
-
-  componentWillMount() {
-      this.getAllBooks();
+        this.updateQuery(this.state.query);
   }
 
   updateQuery = (query) => {
-      if ( query !== '' && (query.length && this.state.books.length) > 0){
+      if ( query !== '' && query.length > 0 ) {
         //set the query for the search bar
         this.setState({query: query});
         let result = [];
@@ -55,7 +33,7 @@ class SearchPage extends Component {
                 //default set category to none
                 book.shelf = 'none';
                 //loop over books from main route
-                this.state.books.forEach(passedInBooks => {
+                this.props.books.forEach(passedInBooks => {
                     if ( passedInBooks.id === book.id ){
                         book.shelf = passedInBooks.shelf;
                     }
@@ -65,27 +43,28 @@ class SearchPage extends Component {
             });
 
             this.setState({
-                latestBooks: result,
-                currentCategories: this.props.currentCategory.concat('none')
+                books: result
             });
 
         }).catch((error) => {
           console.error(error);
         });
       } else {
-          this.setState({query: '', latestBooks: [], currentCategories: []});
+          this.setState({query: '', books: []});
       }
   };
 
   render() {
-    const {query, latestBooks} = this.state;
-    let showBooks = [];
+    const {query, books} = this.state;
+    const {currentCategory} = this.props;
+    let showBooks = [], updatedShelfs = [];
 
     if ( query ) {
         const match = new RegExp( escapeRegExp(query, 'i') );
-        if ( latestBooks && latestBooks.length > 0 ){
-            showBooks = this.state.latestBooks.filter( (book) => match.test(book.title) );
+        if ( books && books.length > 0 ){
+            showBooks = this.state.books.filter( (book) => match.test(book.title) );
             showBooks.sort(sortBy('title'));
+            updatedShelfs = currentCategory.concat('none');
         } else {
             showBooks = [];
         }
@@ -103,7 +82,7 @@ class SearchPage extends Component {
         </div>
       </div>
       <div className="search-books-results">
-        <BookShelf books={showBooks} currentCategory={ this.state.currentCategories } onUpdateBookCategory={this.props.onUpdateBookCategory } />
+        <BookShelf books={showBooks} currentCategory={ updatedShelfs } onUpdateBookCategory={this.props.onUpdateBookCategory } />
       </div>
     </div>
     )
