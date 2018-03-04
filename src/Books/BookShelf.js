@@ -7,13 +7,10 @@ class BookShelf extends Component {
         switch (catName){
             case 'currentlyReading':
                 return 'Currently Reading';
-                break;
             case 'wantToRead':
                 return 'Want to Read';
-                break;
             case 'read':
                 return 'Read';
-                break;
             default:
                 return 'None';
         }
@@ -28,7 +25,7 @@ class BookShelf extends Component {
                     <div className="bookshelf-books">
                         <ol className="books-grid">
                         {this.props.books.filter(books => books.shelf === catName).map( (aBook) => (
-                            <li key={aBook.id}>
+                            <li key={aBook.title + aBook.id}>
                                 <Book onUpdateBookCategory={this.props.onUpdateBookCategory } book={aBook} />
                             </li>
                         ))}
