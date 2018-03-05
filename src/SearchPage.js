@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import escapeRegExp from 'escape-string-regexp';
 import {Link} from 'react-router-dom';
 import sortBy from 'sort-by';
 import BookShelf from './Books/BookShelf';
@@ -17,6 +16,7 @@ class SearchPage extends Component {
     }
 
   componentWillReceiveProps() {
+    	  console.log('query at', this.state.query);
         this.updateQuery(this.state.query);
   }
 
@@ -60,10 +60,9 @@ class SearchPage extends Component {
     let showBooks = [], updatedShelfs = [];
 
     if ( query ) {
-        const match = new RegExp( escapeRegExp(query, 'i') );
         if ( books && books.length > 0 ){
-            showBooks = this.state.books.filter( (book) => match.test(book.title) );
-            showBooks.sort(sortBy('title'));
+            showBooks = books;
+	          sortBy(showBooks, 'title');
             updatedShelfs = currentCategory.concat('none');
         } else {
             showBooks = [];
