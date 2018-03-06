@@ -7,7 +7,6 @@ import * as BooksAPI from './BooksAPI'
 
 class BooksApp extends React.Component {
   state = {
-    categories: ["currentlyReading","wantToRead","read"],
     myBooks: []
   };
 
@@ -35,6 +34,7 @@ class BooksApp extends React.Component {
   };
 
   render() {
+	  const categories = ["currentlyReading","wantToRead","read"];
     return (
       <div className="app">
         <Route exact path="/" render={() => (
@@ -43,7 +43,7 @@ class BooksApp extends React.Component {
                     <h1>MyReads</h1>
                 </div>
                 <div className="list-books-content">
-                    <BookShelf books={this.state.myBooks} currentCategory={ this.state.categories } onUpdateBookCategory={this.updateCategory} />
+                    <BookShelf books={this.state.myBooks} currentCategory={ categories } onUpdateBookCategory={this.updateCategory} />
                 </div>
                 <div className="open-search">
                     <Link to="/search">Add a book</Link>
@@ -52,7 +52,7 @@ class BooksApp extends React.Component {
         )}/>
 
         <Route path="/search" render={() => (
-                <SearchPage books={this.state.myBooks} currentCategory={ this.state.categories } onUpdateBookCategory={this.updateCategory} />
+                <SearchPage books={this.state.myBooks} currentCategory={ categories } onUpdateBookCategory={this.updateCategory} />
             )}
         />
       </div>
