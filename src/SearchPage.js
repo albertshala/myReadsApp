@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import sortBy from 'sort-by';
-import BookShelf from './Books/BookShelf';
+import Book from './Books/Book';
 import * as BooksAPI from './BooksAPI'
 
 class SearchPage extends Component {
@@ -22,6 +21,7 @@ class SearchPage extends Component {
 	updateQuery = (query) => {
 		if (query !== '' && query.length > 0) {
 			let result = [];
+			this.setState({query: query});
 			//Make a request to the search api, remove white spaces from query
 			BooksAPI.search(query.trim())
 				.then((searchResults) => {
@@ -40,8 +40,7 @@ class SearchPage extends Component {
 						});
 
 					this.setState({
-						books: result,
-						query: query
+						books: result
 					});
 
 				}).catch((error) => {
@@ -54,18 +53,9 @@ class SearchPage extends Component {
 
 	render() {
 		const {query, books} = this.state;
-		const {currentCategory} = this.props;
-		let showBooks = [], updatedShelfs = [];
-
-		if (query) {
-			if (books && books.length > 0) {
-				showBooks = books;
-				sortBy(showBooks, 'title');
-				updatedShelfs = currentCategory.concat('none');
-			} else {
-				showBooks = [];
-			}
-		}
+		//const {currentCategory} = this.props;
+		const showBooks = query && books && books.length > 0 ? books : []
+		//let updatedShelfs = currentCategory.concat('none');
 
 		return (
 			<div className="search-books">
@@ -80,8 +70,17 @@ class SearchPage extends Component {
 					</div>
 				</div>
 				<div className="search-books-results">
-					<BookShelf books={showBooks} currentCategory={updatedShelfs}
-					           onUpdateBookCategory={this.props.onUpdateBookCategory}/>
+
+					<div className="bookshelf-books">
+						<ol className="books-grid">
+							{showBooks.map( (aBook) => (
+								<li key={aBook.title + aBook.id}>
+									<Book onUpdateBookCategory={this.props.onUpdateBookCategory } book={aBook} />
+								</li>
+							))}
+						</ol>
+					</div>
+
 				</div>
 			</div>
 		)
