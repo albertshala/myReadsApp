@@ -1,28 +1,16 @@
 import React, { Component } from 'react';
 import Book from './Book'
+import PropTypes from 'prop-types';
+import { getFullCategoryName} from "../utils/category.filter";
 
 class BookShelf extends Component {
-
-    getFullCategoryName(catName){
-        switch (catName){
-            case 'currentlyReading':
-                return 'Currently Reading';
-            case 'wantToRead':
-                return 'Want to Read';
-            case 'read':
-                return 'Read';
-            default:
-                return 'None';
-        }
-    }
-
     render() {
         const {books, currentCategory, onUpdateBookCategory} = this.props;
         return(
             <div>
                 {currentCategory.map((catName) => (
                 <div className="bookshelf" key={catName}>
-                    <h2 className="bookshelf-title">{this.getFullCategoryName(catName)}</h2>
+                    <h2 className="bookshelf-title">{getFullCategoryName(catName)}</h2>
                     <div className="bookshelf-books">
                         <ol className="books-grid">
                         {books.filter(book => book.shelf === catName).map( (aBook) => (
@@ -38,6 +26,12 @@ class BookShelf extends Component {
         )
     }
 }
+
+BookShelf.PropTypes = {
+	book: PropTypes.array.isRequired,
+	currentCategory: PropTypes.array.isRequired,
+	onUpdateBookCategory: PropTypes.func.isRequired
+};
 
 export default BookShelf
 

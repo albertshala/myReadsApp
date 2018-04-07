@@ -14,9 +14,21 @@ class SearchPage extends Component {
 		};
 	}
 
-	componentWillReceiveProps() {
+	componenDidUpdate() {
 		this.updateQuery(this.state.query);
 	}
+
+	/*
+	*
+	* componentWillReceiveProps is deprecated on the new version of React 16.3.0
+	* because it makes unstable a new feature that they are adding instead you can use
+	* componenDidUpdate(prevProps, prevState) and the new life-cycle method static getDerivatedPropsFromState(nextProps, prevState)
+	* Check this doc to learn more about it and the new changes on React 16.3.0:
+	* https://reactjs.org/blog/2018/03/29/react-v-16-3.html#component-lifecycle-changes
+	* https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+	*
+	* */
+
 
 	updateQuery = (query) => {
 		if (query !== '' && query.length > 0) {
